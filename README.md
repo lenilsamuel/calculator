@@ -4,7 +4,7 @@ This is a basic calculator building to practice my HTML, CSS, JS and jQuery fron
 
 - The calculator supports basic addition, subtraction, multiplication and division
 - The calculator also supports keyboard input
-- The app uses responsive design. Screen widths below 768px render the mobile view as shown below. Screen widths above 768px render the tablet view instead
+- The app uses responsive design. Screen widths below 768px render the mobile view as shown below. Screen widths above 768px render the desktop view instead
 
 
 ## Final Product

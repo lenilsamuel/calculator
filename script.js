@@ -1,5 +1,13 @@
 $(document).ready(function () {
   const calculatorDisplay = $(".calc-val");
+  const calculate = {
+    "/": (firstNumber, secondNumber) => firstNumber / secondNumber,
+    "*": (firstNumber, secondNumber) => firstNumber * secondNumber,
+    "+": (firstNumber, secondNumber) => firstNumber + secondNumber,
+    "-": (firstNumber, secondNumber) => firstNumber - secondNumber,
+    "=": (firstNumber, secondNumber) => secondNumber,
+  };
+
   let firstValue = 0;
   let operatorValue = "";
   let awaitingNextValue = false;
@@ -20,15 +28,22 @@ $(document).ready(function () {
 
   function useOperator(operator) {
     const currentValue = Number(calculatorDisplay.html());
+    // Prevent multiple operators
+    if (operatorValue && awaitingNextValue) {
+      operatorValue = operator;
+      return;
+    }
+
     // Assign firstValue if no value
     if (!firstValue) {
       firstValue = currentValue;
     } else {
-      console.log("currentValue", currentValue);
+      const calculation = calculate[operatorValue](firstValue, currentValue);
+      calculatorDisplay.text(calculation);
+      firstValue = calculation;
     }
     awaitingNextValue = true;
     operatorValue = operator;
-    console.log("firstValue", firstValue, "operatorValue", operatorValue);
   }
 
   // Function that prevents a decimal from being added to the display if a decimal already exists
@@ -54,11 +69,19 @@ $(document).ready(function () {
     sendNumberValue(this.value);
   });
 
-  // Reset display on clicking 'C'
+  // Event listener to reset display on clicking 'C' (clear button)
   $("#clear-btn").on("click", function () {
     firstValue = 0;
     operatorValue = "";
     awaitingNextValue = false;
     calculatorDisplay.text("0");
   });
+
+  $(function () {
+    $(document).on("keypress", function (e) {
+      const arrNums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      if (arrNums.includes(Number(e.key))) sendNumberValue(e.key)
+    });
+  });
+
 });

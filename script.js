@@ -6,6 +6,7 @@ $(document).ready(function () {
     "+": (firstNumber, secondNumber) => firstNumber + secondNumber,
     "-": (firstNumber, secondNumber) => firstNumber - secondNumber,
     "=": (firstNumber, secondNumber) => secondNumber,
+    "Enter": (firstNumber, secondNumber) => secondNumber,
   };
 
   let firstValue = 0;
@@ -33,7 +34,6 @@ $(document).ready(function () {
       operatorValue = operator;
       return;
     }
-
     // Assign firstValue if no value
     if (!firstValue) {
       firstValue = currentValue;
@@ -46,16 +46,28 @@ $(document).ready(function () {
     operatorValue = operator;
   }
 
-  // Function that prevents a decimal from being added to the display if a decimal already exists
-  $(".decimal").on("click", function () {
+  function useDecimal () {
     if (awaitingNextValue) return;
     const displayValue = calculatorDisplay.html();
-    if (!displayValue.includes(this.value)) {
-      calculatorDisplay.text(displayValue + this.value);
+    if (!displayValue.includes('.')) {
+      calculatorDisplay.text(displayValue + '.');
     } else {
       calculatorDisplay.text(displayValue);
     }
-  });
+  }
+
+  $(".decimal").on("click", useDecimal);
+
+  // Function that prevents a decimal from being added to the display if a decimal already exists
+  // $(".decimal").on("click", function () {
+  //   if (awaitingNextValue) return;
+  //   const displayValue = calculatorDisplay.html();
+  //   if (!displayValue.includes(this.value)) {
+  //     calculatorDisplay.text(displayValue + this.value);
+  //   } else {
+  //     calculatorDisplay.text(displayValue);
+  //   }
+  // });
 
   // Add event listeners for numbers. Decimal & operator buttons are ignored
   $("button").on("click", function () {
@@ -79,8 +91,12 @@ $(document).ready(function () {
 
   $(function () {
     $(document).on("keypress", function (e) {
+      console.log(e.key);
       const arrNums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      if (arrNums.includes(Number(e.key))) sendNumberValue(e.key)
+      const operatorArr = ['+', '-', '*', '/', '=', 'Enter']
+      if (arrNums.includes(Number(e.key))) sendNumberValue(e.key);
+      if (operatorArr.includes(e.key)) useOperator(e.key)
+      if (e.key === '.') useDecimal();
     });
   });
 

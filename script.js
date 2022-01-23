@@ -12,14 +12,25 @@ $(document).ready(function () {
     }
   }
 
-  // Add event listeners for numbers, operators and decimal buttons
+  // Function that prevents a decimal from being added to the display if a decimal already exists 
+  $(".decimal").on("click", function () {
+    const displayValue = calculatorDisplay.html();
+    if (!displayValue.includes(this.value)) {
+      calculatorDisplay.text(displayValue + this.value);
+    } else {
+      calculatorDisplay.text(displayValue);
+    }
+  });
+
+  // Add event listeners for numbers, operators. Decimal button is ignored
   $("button").on("click", function () {
+    if (this.value === '.') return;
     sendNumberValue(this.value);
   });
 
   // Reset display on clicking 'C'
   $("#clear-btn").on("click", function () {
-    calculatorDisplay.text('0');
+    calculatorDisplay.text("0");
   });
 
 });

@@ -12,6 +12,7 @@ Calculator on desktop
 !["Calculator page on desktop"](https://github.com/lenilsamuel/calculator/blob/master/docs/calculator-desktop-view.png?raw=true)
 
 Calculator on mobile
+
 !["Calculator page on mobile"](https://github.com/lenilsamuel/calculator/blob/master/docs/calculator-mobile-view.png?raw=true)
 
 

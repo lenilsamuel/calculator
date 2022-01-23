@@ -6,7 +6,7 @@ $(document).ready(function () {
     "+": (firstNumber, secondNumber) => firstNumber + secondNumber,
     "-": (firstNumber, secondNumber) => firstNumber - secondNumber,
     "=": (firstNumber, secondNumber) => secondNumber,
-    "Enter": (firstNumber, secondNumber) => secondNumber,
+    'Enter': (firstNumber, secondNumber) => secondNumber,
   };
 
   let firstValue = 0;
@@ -39,35 +39,24 @@ $(document).ready(function () {
       firstValue = currentValue;
     } else {
       const calculation = calculate[operatorValue](firstValue, currentValue);
-      calculatorDisplay.text(calculation);
+      calculatorDisplay.html(calculation);
       firstValue = calculation;
     }
     awaitingNextValue = true;
     operatorValue = operator;
   }
 
-  function useDecimal () {
+  function useDecimal() {
     if (awaitingNextValue) return;
     const displayValue = calculatorDisplay.html();
-    if (!displayValue.includes('.')) {
-      calculatorDisplay.text(displayValue + '.');
+    if (!displayValue.includes(".")) {
+      calculatorDisplay.text(displayValue + ".");
     } else {
       calculatorDisplay.text(displayValue);
     }
   }
 
   $(".decimal").on("click", useDecimal);
-
-  // Function that prevents a decimal from being added to the display if a decimal already exists
-  // $(".decimal").on("click", function () {
-  //   if (awaitingNextValue) return;
-  //   const displayValue = calculatorDisplay.html();
-  //   if (!displayValue.includes(this.value)) {
-  //     calculatorDisplay.text(displayValue + this.value);
-  //   } else {
-  //     calculatorDisplay.text(displayValue);
-  //   }
-  // });
 
   // Add event listeners for numbers. Decimal & operator buttons are ignored
   $("button").on("click", function () {
@@ -81,23 +70,22 @@ $(document).ready(function () {
     sendNumberValue(this.value);
   });
 
+  $(this).on("keypress", function (e) {
+    const arrNums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const operatorArr = ["+", "-", "*", "/", "=", "Enter"];
+    if (arrNums.includes(Number(e.key))) sendNumberValue(e.key);
+    if (operatorArr.includes(e.key)) {
+      e.preventDefault();
+      useOperator(e.key);
+    }
+    if (e.key === ".") useDecimal();
+  });
+
   // Event listener to reset display on clicking 'C' (clear button)
   $("#clear-btn").on("click", function () {
     firstValue = 0;
     operatorValue = "";
     awaitingNextValue = false;
-    calculatorDisplay.text("0");
+    calculatorDisplay.html("0");
   });
-
-  $(function () {
-    $(document).on("keypress", function (e) {
-      console.log(e.key);
-      const arrNums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const operatorArr = ['+', '-', '*', '/', '=', 'Enter']
-      if (arrNums.includes(Number(e.key))) sendNumberValue(e.key);
-      if (operatorArr.includes(e.key)) useOperator(e.key)
-      if (e.key === '.') useDecimal();
-    });
-  });
-
 });
